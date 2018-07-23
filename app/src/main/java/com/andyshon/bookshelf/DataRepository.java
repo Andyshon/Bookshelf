@@ -58,7 +58,10 @@ public class DataRepository {
     }
 
     public void deleteComment(final CommentEntity commentEntity) {
-        System.out.println("DataRepo deleteComment call");
         mDatabase.commentDao().deleteComment(commentEntity);
+    }
+
+    public void deleteBook(final BookEntity bookEntity) {
+        mDatabase.bookDao().deleteBook(bookEntity);
     }
 }

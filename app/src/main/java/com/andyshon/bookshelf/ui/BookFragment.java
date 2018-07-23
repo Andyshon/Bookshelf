@@ -51,17 +51,9 @@ public class BookFragment extends Fragment {
             //model.deleteComment(commentEntity);
 
             Handler handler = new Handler();
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    model.deleteComment(commentEntity);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getContext(), "Delete done!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+            Thread thread = new Thread(() -> {
+                model.deleteComment(commentEntity);
+                handler.post(() -> Toast.makeText(getContext(), "Delete done!", Toast.LENGTH_SHORT).show());
             }); thread.start();
         }
     };
@@ -73,8 +65,7 @@ public class BookFragment extends Fragment {
         BookViewModel.Factory factory = new BookViewModel.Factory(
                 getActivity().getApplication(), getArguments().getInt(KEY_PRODUCT_ID));
 
-        model = ViewModelProviders.of(this, factory)
-                .get(BookViewModel.class);
+        model = ViewModelProviders.of(this, factory).get(BookViewModel.class);
 
 
         mBinding.setBookViewModel(model);
