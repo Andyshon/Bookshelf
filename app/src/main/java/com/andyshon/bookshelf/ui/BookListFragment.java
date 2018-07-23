@@ -5,8 +5,10 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +30,11 @@ public class BookListFragment extends Fragment {
 
     private ListFragmentBinding mBinding;
 
+    private BookListViewModel viewModel;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.list_fragment, container, false);
 
         mBookAdapter = new BookAdapter(mBookClickCallback, bookLongClickCallback);
@@ -44,13 +47,7 @@ public class BookListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final BookListViewModel viewModel = ViewModelProviders.of(this).get(BookListViewModel.class);
-
-        /*BookListViewModel.Factory factory = new BookListViewModel.Factory(getActivity().getApplication());
-                //getActivity().getApplication(), getArguments().getInt(KEY_PRODUCT_ID));
-
-        final BookListViewModel viewModel = ViewModelProviders.of(this, factory)
-                .get(BookListViewModel.class);*/
+        viewModel = ViewModelProviders.of(this).get(BookListViewModel.class);
 
         subscribeUi(viewModel);
     }
@@ -59,35 +56,46 @@ public class BookListFragment extends Fragment {
         // Update the list when the data changes
         viewModel.getBooks().observe(this, new Observer<List<BookEntity>>() {
             @Override
-            public void onChanged(@Nullable List<BookEntity> myProducts) {
-                if (myProducts != null) {
+            public void onChanged(@Nullable List<BookEntity> myBooks) {
+                if (myBooks != null) {
                     mBinding.setIsLoading(false);
-                    mBookAdapter.setProductList(myProducts);
+                    mBookAdapter.setProductList(myBooks);
                 } else {
                     mBinding.setIsLoading(true);
                 }
-                // espresso does not know how to wait for data binding's loop so we execute changes
-                // sync.
                 mBinding.executePendingBindings();
             }
         });
     }
 
-    private final BookLongClickCallback bookLongClickCallback = new BookLongClickCallback() {
-        @Override
-        public boolean onLongClickMy(Book book) {
-            Toast.makeText(getActivity(), "Long click on book:" + book.getName(), Toast.LENGTH_SHORT).show();
-            return true;
+    private final BookLongClickCallback bookLongClickCallback = book -> {
+        showConfirmDialog(book);
+        return true;
+    };
+
+    private final BookClickCallback mBookClickCallback = book -> {
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+            ((MainActivity) getActivity()).show(book);
         }
     };
 
-    private final BookClickCallback mBookClickCallback = new BookClickCallback() {
-        @Override
-        public void onClick(Book book) {
+    private void showConfirmDialog(final Book book) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setTitle("Delete");
+        alertDialogBuilder.setMessage("Are you sure, You wanted to delete " + book.getName() + "?");
+        alertDialogBuilder.setPositiveButton("Yes",
+                (arg0, arg1) -> {
+                    BookEntity bookEntity = (BookEntity)book;
+                    Handler handler = new Handler();
+                    Thread thread = new Thread(() -> {
+                        viewModel.deleteBook(bookEntity);
+                        handler.post(() -> Toast.makeText(getContext(), bookEntity.getName() + " was deleted!", Toast.LENGTH_SHORT).show());
+                    }); thread.start();
+                });
 
-            if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
-                ((MainActivity) getActivity()).show(book);
-            }
-        }
-    };
+        alertDialogBuilder.setNegativeButton("No", (dialog, which) -> Toast.makeText(getContext(), "Cancel", Toast.LENGTH_SHORT).show());
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 }
