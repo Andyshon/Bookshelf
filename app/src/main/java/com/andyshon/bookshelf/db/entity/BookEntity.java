@@ -2,12 +2,15 @@ package com.andyshon.bookshelf.db.entity;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 
+import com.andyshon.bookshelf.BR;
 import com.andyshon.bookshelf.model.Book;
 
 @Entity(tableName = "books")
-public class BookEntity implements Book {
-    @PrimaryKey
+public class BookEntity extends BaseObservable implements Book {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
     private String description;
@@ -22,6 +25,7 @@ public class BookEntity implements Book {
         this.id = id;
     }
 
+    @Bindable
     @Override
     public String getName() {
         return name;
@@ -29,8 +33,10 @@ public class BookEntity implements Book {
 
     public void setName(String name) {
         this.name = name;
+        notifyPropertyChanged(BR.name);
     }
 
+    @Bindable
     @Override
     public String getDescription() {
         return description;
@@ -38,8 +44,10 @@ public class BookEntity implements Book {
 
     public void setDescription(String description) {
         this.description = description;
+        notifyPropertyChanged(BR.description);
     }
 
+    @Bindable
     @Override
     public int getPrice() {
         return price;
@@ -47,22 +55,8 @@ public class BookEntity implements Book {
 
     public void setPrice(int price) {
         this.price = price;
+        notifyPropertyChanged(BR.price);
     }
 
-    public BookEntity() {
-    }
-
-    public BookEntity(int id, String name, String description, int price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
-
-    public BookEntity(Book book) {
-        this.id = book.getId();
-        this.name = book.getName();
-        this.description = book.getDescription();
-        this.price = book.getPrice();
-    }
+    public BookEntity() {}
 }

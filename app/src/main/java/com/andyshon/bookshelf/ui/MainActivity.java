@@ -30,12 +30,23 @@ public class MainActivity extends AppCompatActivity {
     /** Shows the book detail fragment */
     public void show(Book book) {
 
-        BookFragment bookFragment = BookFragment.forProduct(book.getId());
+        BookFragment bookFragment = BookFragment.forBook(book.getId());
 
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("book")
                 .replace(R.id.fragment_container,
                         bookFragment, null).commit();
+    }
+
+    /** Show the book add fragment */
+    public void showBookAddFragment() {
+
+        BookAddFragment bookAddFragment = new BookAddFragment();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("bookAdd")
+                .replace(R.id.fragment_container, bookAddFragment, null).commit();
     }
 }

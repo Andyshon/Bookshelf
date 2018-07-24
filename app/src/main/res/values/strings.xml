@@ -22,4 +22,8 @@
     <string name="cd_books_list">Books list</string>
     <string name="cd_comments_list">Comments list</string>
     <string name="cd_book_name">Name of the book</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="price">Price</string>
+    <string name="add">Add</string>
 </resources>

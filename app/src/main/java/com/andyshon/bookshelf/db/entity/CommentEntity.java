@@ -60,13 +60,5 @@ public class CommentEntity implements Comment {
         this.postedAt = postedAt;
     }
 
-    public CommentEntity() {
-    }
-
-    public CommentEntity(int id, int bookId, String text, Date postedAt) {
-        this.id = id;
-        this.bookId = bookId;
-        this.text = text;
-        this.postedAt = postedAt;
-    }
+    public CommentEntity() {}
 }

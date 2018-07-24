@@ -50,4 +50,8 @@ public class BookListViewModel extends AndroidViewModel {
     public void deleteBook(BookEntity bookEntity) {
         dataRepository.deleteBook(bookEntity);
     }
+
+    public void addBook(BookEntity bookEntity) {
+        dataRepository.addBook(bookEntity);
+    }
 }

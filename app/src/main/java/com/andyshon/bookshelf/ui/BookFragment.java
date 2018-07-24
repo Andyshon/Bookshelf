@@ -24,7 +24,7 @@ import java.util.List;
 
 public class BookFragment extends Fragment {
 
-    private static final String KEY_PRODUCT_ID = "book_id";
+    private static final String KEY_BOOK_ID = "book_id";
 
     private BookFragmentBinding mBinding;
 
@@ -63,7 +63,7 @@ public class BookFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         BookViewModel.Factory factory = new BookViewModel.Factory(
-                getActivity().getApplication(), getArguments().getInt(KEY_PRODUCT_ID));
+                getActivity().getApplication(), getArguments().getInt(KEY_BOOK_ID));
 
         model = ViewModelProviders.of(this, factory).get(BookViewModel.class);
 
@@ -97,11 +97,11 @@ public class BookFragment extends Fragment {
         });
     }
 
-    /** Creates product fragment for specific product ID */
-    public static BookFragment forProduct(int productId) {
+    /** Creates book fragment for specific book ID */
+    public static BookFragment forBook(int bookId) {
         BookFragment fragment = new BookFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_PRODUCT_ID, productId);
+        args.putInt(KEY_BOOK_ID, bookId);
         fragment.setArguments(args);
         return fragment;
     }

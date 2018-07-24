@@ -19,6 +19,9 @@ public interface BookDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<BookEntity> books);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertSingleBook(BookEntity book);
+
     @Query("select * from books where id = :bookId")
     LiveData<BookEntity> loadBook(int bookId);
 

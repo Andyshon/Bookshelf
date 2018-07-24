@@ -64,4 +64,8 @@ public class DataRepository {
     public void deleteBook(final BookEntity bookEntity) {
         mDatabase.bookDao().deleteBook(bookEntity);
     }
+
+    public void addBook(final BookEntity bookEntity) {
+        mDatabase.bookDao().insertSingleBook(bookEntity);
+    }
 }

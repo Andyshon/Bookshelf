@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="book" type="com.andyshon.bookshelf.db.entity.BookEntity"/>
+        <variable
+            name="callback" type="com.andyshon.bookshelf.ui.BookAddCallback"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/cardview_light_background"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/title">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="@={book.name}"
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/description">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="@={book.description}"
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text='@={""+book.price}'
+                    android:maxLines="1"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <android.support.design.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="18dp"
+            android:gravity="center_vertical"
+            android:layout_gravity="center"
+            app:iconTint="@android:color/holo_red_dark"
+            app:rippleColor="@color/colorAccent"
+            app:strokeColor="@color/colorAccent"
+            app:strokeWidth="3dp"
+            android:textColor="#fff"
+            android:text="@string/add"
+            android:textSize="20sp"
+            android:textAppearance="@string/add"
+            android:onClick="@{() -> callback.bookAdd(book)}"
+            app:backgroundTint="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+</layout>
